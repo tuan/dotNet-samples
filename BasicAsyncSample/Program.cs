@@ -2,14 +2,36 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BasicAsyncSample
 {
-    class Program
+    public static class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
+            PrintCurrentThreadId();
+
+            DoSomethingAsync().Wait();
+        }
+
+        private static async Task DoSomethingAsync()
+        {
+            PrintCurrentThreadId();
+            
+            await Task.Delay(TimeSpan.FromSeconds(2)).ConfigureAwait(false);
+            
+            PrintCurrentThreadId();
+            await Task.Delay(TimeSpan.FromSeconds(2)).ConfigureAwait(false);
+
+            PrintCurrentThreadId();
+            Console.ReadKey();
+        }
+
+        private static void PrintCurrentThreadId()
+        {
+            Console.WriteLine("Current thread: {0} ", Thread.CurrentThread.ManagedThreadId);
         }
     }
 }
