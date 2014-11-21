@@ -11,6 +11,7 @@ namespace BasicAsyncSample
     {
         public static void Main(string[] args)
         {
+            // prints out the main thread
             PrintCurrentThreadId();
 
             DoSomethingAsync().Wait();
@@ -18,14 +19,19 @@ namespace BasicAsyncSample
 
         private static async Task DoSomethingAsync()
         {
+            // this should print out the id of the thread that is executing Main
             PrintCurrentThreadId();
-            
+
+            // ConfigureAwait(false) - await, but don't have to return back to original synchronization context when done 
             await Task.Delay(TimeSpan.FromSeconds(2)).ConfigureAwait(false);
             
+            // diff thread might be executing the next line
             PrintCurrentThreadId();
             await Task.Delay(TimeSpan.FromSeconds(2)).ConfigureAwait(false);
 
+            // diff thread might be executing the next line
             PrintCurrentThreadId();
+            Console.WriteLine("Press anykey to exit..");
             Console.ReadKey();
         }
 
